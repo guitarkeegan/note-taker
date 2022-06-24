@@ -1,6 +1,21 @@
 [
     {
-        "title":"Test Title",
-        "text":"Test text"
+        "title": "Test Title",
+        "text": "Test text"
+    },
+    {
+        "title": "New Note",
+        "text": "I have a new thing to say.",
+        "id": "f54c8687-ec3e-4e2f-a74d-457d564b4152"
+    },
+    {
+        "title": "new note",
+        "text": "now?",
+        "id": "eaa7dcb6-d0f8-43fe-bb5c-2452aeada18e"
+    },
+    {
+        "title": "where notes?",
+        "text": "where are my notes\n",
+        "id": "139bcb65-bffc-4475-943f-7c4d7a74c9f8"
     }
 ]
