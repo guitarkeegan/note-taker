@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -15,7 +16,8 @@ app.get("/notes", (req, res)=>{
     res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
-app.get("/api/notes", (req, res)=>{
+app.route("/api/notes")
+.get((req, res)=>{
     fs.readFile("./db/db.json", (err, data)=>{
        if (err){
         console.error(err);
@@ -49,6 +51,35 @@ app.get("/api/notes", (req, res)=>{
         res.status(500).json("Error making post");
     }  
 });
+
+app.delete("/api/notes/:id", (req, res)=>{
+    const idToDelete = req.params.id;
+    
+    fs.readFile("./db/db.json", (err, data)=>{
+        if (err){
+            console.error(err); // why this instead of log? // when to console log or res.json(send response)?
+        } else {
+            const parsedNotes = JSON.parse(data);
+            console.log(parsedNotes);
+            for (let note of parsedNotes){
+                console.log("hit for");
+                console.log(note.id, idToDelete);
+                if (note.id === idToDelete){
+                
+                    const indexToDelete = parsedNotes.indexOf(note);
+
+                    parsedNotes.splice(indexToDelete, 1);
+
+                    fs.writeFile("./db/db.json", JSON.stringify(parsedNotes, null, 4), writeErr=>
+                    writeErr ? console.error(writeErr) : console.info("Updated notes!"))
+                    // console.info ?
+                    res.status(200).json({status: "success", body: "Item deleted"});
+                
+                }
+           }
+        }
+    })
+})
 
 app.get("*", (req, res)=>{
     res.sendFile(path.join(__dirname, "public/index.html"));
