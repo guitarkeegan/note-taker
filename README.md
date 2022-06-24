@@ -39,4 +39,6 @@
   
  ## Preview
 
+ [Live Site](https://rocky-ocean-18143.herokuapp.com/)
+
  ![Demo](./public/assets/img/Note-Taker.gif)
