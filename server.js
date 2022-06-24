@@ -22,20 +22,34 @@ app.get("*", (req, res)=>{
 app.get("/api/notes", (req, res)=>{
 
     fs.readFile("./db/db.json", (err, data)=>{
-       err ? console.log(err) : res.json(data);
+       err ? console.error(err) : res.json(data);
     })
 })
 .post("/api/notes", (req, res)=>{
     const {title, text} = req.body;
-    const id = uuidv4();
-    console.log(id);
     if (title && text){
         const newPost = {
             title: title,
             text: text,
-            id: id
+            id: uuidv4()
         }
-    }
-   
-    fs.appendFile("./db/db.json", JSON.stringify(newPost))
+
+        fs.readFile("./db/db.json", (err, data)=>{
+            if (err){
+                console.error(err);
+            } else {
+                const parsedNotes = JSON.parse(data);
+                parsedNotes.push(newPost);
+                fs.writeFile("./db/db.json", JSON.stringify(parsedNotes, null, 4), writeErr=> writeErr ? console.error(writeErr) : console.info("Updated notes!"))
+            }
+         })
+         res.status(201).json({status: "success", body: newPost});
+
+    } else {
+        res.status(500).json("Error making post");
+    }  
+});
+
+app.listen(port, ()=>{
+    console.log("App lisening on port " + port);
 })
